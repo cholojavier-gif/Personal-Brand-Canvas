@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Personal Brand Canvas</title>
+  <style>
+    /* =========
+       Base (mobile‑first)
+       ========= */
+    :root {
+      --accent-1: #eb3349;
+      --accent-2: #f45c43;
+      --surface: #ffffff;
+      --surface-2: #f8f9fa;
+      --text-1: #333;
+      --text-2: #555;
+      --text-3: #666;
+      --radius-lg: 20px;
+      --radius-md: 15px;
+      --radius-sm: 10px;
+      --shadow-1: 0 12px 36px rgba(0, 0, 0, 0.22);
+      --shadow-2: 0 8px 24px rgba(0, 0, 0, 0.14);
+      --shadow-3: 0 3px 10px rgba(0, 0, 0, 0.1);
+      --gap: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+      min-height: 100dvh;
+      padding: 12px; /* tighter on small screens */
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: var(--surface);
+      border-radius: clamp(12px, 3vw, var(--radius-lg));
+      box-shadow: var(--shadow-1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+      color: white;
+      padding: clamp(18px, 5vw, 30px);
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: clamp(1.5rem, 4.8vw, 2.5rem);
+      line-height: 1.15;
+      margin: 0 0 6px 0;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .header p {
+      font-size: clamp(0.95rem, 3.4vw, 1.1rem);
+      opacity: 0.95;
+      margin: 0;
+    }
+
+    .canvas-container {
+      padding: clamp(16px, 4.5vw, 40px);
+      display: grid;
+      grid-template-columns: 1fr; /* single column by default */
+      gap: clamp(14px, 3.6vw, 25px);
+    }
+
+    .canvas-section {
+      background: var(--surface-2);
+      border-radius: var(--radius-md);
+      padding: clamp(16px, 4vw, 25px);
+      border-top: 4px solid var(--accent-1);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    /* Disable hover lift on coarse pointers to avoid jumpiness */
+    @media (hover: hover) and (pointer: fine) {
+      .canvas-section:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); }
+    }
+
+    .section-title {
+      color: var(--accent-1);
+      font-size: clamp(1.05rem, 3.2vw, 1.3rem);
+      margin-bottom: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-icon {
+      width: clamp(26px, 6vw, 30px);
+      height: clamp(26px, 6vw, 30px);
+      background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: clamp(14px, 4.5vw, 16px);
+      flex: 0 0 auto;
+    }
+
+    .section-description {
+      color: var(--text-3);
+      font-size: clamp(0.9rem, 3.4vw, 0.95rem);
+      margin-bottom: 12px;
+      line-height: 1.55;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 110px; /* slightly shorter on mobile */
+      padding: 14px;
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-sm);
+      font: inherit;
+      font-size: 1rem;
+      resize: vertical;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      background: #fff;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent-1);
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-1) 18%, transparent);
+    }
+
+    /* Action buttons */
+    .action-buttons {
+      padding: clamp(16px, 4.5vw, 28px) clamp(16px, 5vw, 40px) clamp(22px, 5.5vw, 40px);
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap; /* allow wrapping on smaller screens */
+    }
+
+    .btn {
+      appearance: none;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+      min-width: min(100%, 480px); /* full width on small screens, capped */
+      touch-action: manipulation;
+    }
+
+    .btn + .btn { margin-left: 0; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(235, 51, 73, 0.35);
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--accent-1);
+      border: 2px solid var(--accent-1);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(235, 51, 73, 0.45); }
+      .btn-secondary:hover { background: var(--accent-1); color: #fff; }
+    }
+
+    .output-section {
+      display: none;
+      padding: clamp(16px, 4.5vw, 40px);
+      background: var(--surface-2);
+      margin: 0 clamp(16px, 5vw, 40px) clamp(18px, 5vw, 40px);
+      border-radius: var(--radius-md);
+      animation: slideIn 0.5s ease both;
+    }
+
+    .output-section.show { display: block; }
+
+    .brand-statement, .next-steps {
+      background: #fff;
+      padding: clamp(18px, 4.6vw, 30px);
+      border-radius: var(--radius-sm);
+    }
+
+    .brand-statement { border-left: 5px solid var(--accent-1); margin-bottom: 18px; }
+
+    .brand-statement h3, .next-steps h3 {
+      color: var(--text-1);
+      margin: 0 0 12px 0;
+      font-size: clamp(1.15rem, 3.8vw, 1.5rem);
+    }
+
+    .statement-text { color: var(--text-2); font-size: 1.05rem; line-height: 1.7; font-style: italic; }
+
+    .step-list { list-style: none; padding: 0; margin: 0; }
+
+    .step-list li {
+      padding: 14px;
+      margin-bottom: 10px;
+      background: var(--surface-2);
+      border-radius: 10px;
+      border-left: 4px solid var(--accent-1);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .step-list li:hover { transform: translateX(4px); box-shadow: var(--shadow-3); }
+    }
+
+    .step-number {
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
+      color: #fff; border-radius: 999px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 800; flex: 0 0 auto;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =========
+       Responsive grid upshifts
+       ========= */
+    @media (min-width: 640px) { /* ~sm */
+      .canvas-container { grid-template-columns: repeat(2, 1fr); }
+      .btn { min-width: auto; padding: 14px 24px; }
+    }
+
+    @media (min-width: 1024px) { /* ~lg */
+      .canvas-container { grid-template-columns: repeat(3, 1fr); }
+      .canvas-section.full-width { grid-column: 1 / -1; }
+      .canvas-section.half-width { grid-column: span 2; }
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Personal Brand Canvas</h1>
+      <p>Design your authentic entrepreneurial identity</p>
+    </div>
+
+    <div class="canvas-container">
+      <div class="canvas-section">
+        <div class="section-title"><div class="section-icon">🎯</div>Purpose &amp; Mission</div>
+        <p class="section-description">What drives you? What problem do you want to solve?</p>
+        <textarea id="purpose" placeholder="Example: I want to democratize access to quality education through technology..."></textarea>
+      </div>
+
+      <div class="canvas-section">
+        <div class="section-title"><div class="section-icon">💡</div>Core Values</div>
+        <p class="section-description">What 3-5 values guide your decisions?</p>
+        <textarea id="values" placeholder="Example: Innovation, Integrity, Impact, Inclusivity..."></textarea>
+      </div>
+
+      <div class="canvas-section">
+        <div class="section-title"><div class="section-icon">🚀</div>Unique Value Proposition</div>
+        <p class="section-description">What makes you different from others in your field?</p>
+        <textarea id="uvp" placeholder="Example: I combine technical expertise with storytelling to make complex ideas accessible..."></textarea>
+      </div>
+
+      <div class="canvas-section">
+        <div class="section-title"><div class="section-icon">👥</div>Target Audience</div>
+        <p class="section-description">Who do you want to serve and influence?</p>
+        <textarea id="audience" placeholder="Example: Aspiring entrepreneurs, tech startups, social impact organizations..."></textarea>
+      </div>
+
+      <div class="canvas-section">
+        <div class="section-title"><div class="section-icon">💪</div>Key Strengths</div>
+        <p class="section-description">What are your superpowers?</p>
+        <textarea id="strengths" placeholder="Example: Problem-solving, public speaking, data analysis, team building..."></textarea>
+      </div>
+
+      <div class="canvas-section">
+        <div class="section-title"><div class="section-icon">🎨</div>Brand Personality</div>
+        <p class="section-description">How would others describe your style?</p>
+        <textarea id="personality" placeholder="Example: Approachable, innovative, professional yet playful..."></textarea>
+      </div>
+
+      <div class="canvas-section half-width">
+        <div class="section-title"><div class="section-icon">📱</div>Digital Channels</div>
+        <p class="section-description">Where will you build your online presence?</p>
+        <textarea id="channels" placeholder="Example: LinkedIn for professional networking, Instagram for visual storytelling, Medium for thought leadership articles..."></textarea>
+      </div>
+
+      <div class="canvas-section">
+        <div class="section-title"><div class="section-icon">📊</div>Success Metrics</div>
+        <p class="section-description">How will you measure your brand impact?</p>
+        <textarea id="metrics" placeholder="Example: LinkedIn followers, speaking engagements, media mentions..."></textarea>
+      </div>
+
+      <div class="canvas-section full-width">
+        <div class="section-title"><div class="section-icon">📝</div>Personal Brand Statement (30‑second pitch)</div>
+        <p class="section-description">Craft a memorable introduction that captures your essence</p>
+        <textarea id="statement" placeholder="Example: I'm [name], a [role] who helps [target audience] achieve [outcome] through [unique approach]. I'm passionate about [mission] and known for [key strength]."></textarea>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn btn-primary" onclick="generateBrandPlan()">Generate Brand Action Plan</button>
+      <button class="btn btn-secondary" onclick="clearCanvas()">Clear Canvas</button>
+    </div>
+
+    <div id="output" class="output-section" aria-live="polite">
+      <div class="brand-statement">
+        <h3>Your Personal Brand Summary</h3>
+        <p id="brandSummary" class="statement-text"></p>
+      </div>
+
+      <div class="next-steps">
+        <h3>30‑Day Brand Building Action Plan</h3>
+        <ul id="actionPlan" class="step-list"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function generateBrandPlan() {
+      const fields = ['purpose', 'values', 'uvp', 'audience', 'strengths', 'personality', 'channels', 'metrics', 'statement'];
+      let allFilled = true;
+
+      fields.forEach((field) => {
+        const value = document.getElementById(field).value.trim();
+        if (!value) allFilled = false;
+      });
+
+      if (!allFilled) {
+        // Friendlier mobile message
+        window.alert('Please fill in all fields to generate your brand action plan.');
+        return;
+      }
+
+      const purpose = document.getElementById('purpose').value;
+      const uvp = document.getElementById('uvp').value;
+      const audience = document.getElementById('audience').value;
+      const personality = document.getElementById('personality').value;
+
+      const summary = `Your personal brand centers on ${purpose.toLowerCase()}. You differentiate yourself through ${uvp.toLowerCase()}, specifically serving ${audience.toLowerCase()}. Your brand personality is ${personality.toLowerCase()}, creating an authentic connection with your audience.`;
+      document.getElementById('brandSummary').textContent = summary;
+
+      const channels = document.getElementById('channels').value;
+      const hasLinkedIn = channels.toLowerCase().includes('linkedin');
+      const hasWebsite = channels.toLowerCase().includes('website') || channels.toLowerCase().includes('portfolio');
+
+      const actionSteps = [
+        { step: 1, action: 'Audit & Optimize Current Presence', details: 'Google yourself, update profile photos, make your bio consistent across platforms.' },
+        { step: 2, action: hasLinkedIn ? 'Optimize LinkedIn Profile' : 'Create Professional LinkedIn Profile', details: 'Craft a compelling headline, write a story-driven summary, add relevant skills.' },
+        { step: 3, action: 'Develop Content Calendar', details: 'Plan 30 days of content: 2–3 posts/week sharing insights, learnings, and value.' },
+        { step: 4, action: hasWebsite ? 'Update Portfolio Website' : 'Create Simple Portfolio Site', details: 'Use Carrd, Linktree, or GitHub Pages to create a central hub for your brand.' },
+        { step: 5, action: 'Network Strategically', details: 'Connect with 5 new people weekly in your target audience and engage meaningfully.' },
+        { step: 6, action: 'Create Signature Content', details: 'Write one detailed article or create one video showcasing your expertise.' },
+        { step: 7, action: 'Track & Iterate', details: `Monitor your metrics: ${document.getElementById('metrics').value}. Adjust strategy based on data.` },
+      ];
+
+      const actionPlanList = document.getElementById('actionPlan');
+      actionPlanList.innerHTML = '';
+
+      actionSteps.forEach((item, index) => {
+        setTimeout(() => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <div class="step-number">${item.step}</div>
+            <div>
+              <strong>Week ${Math.ceil((index + 1) / 2)}:</strong> ${item.action}<br />
+              <small style="color: #666; margin-top: 6px; display: block;">${item.details}</small>
+            </div>`;
+          actionPlanList.appendChild(li);
+        }, index * 100);
+      });
+
+      const outputSection = document.getElementById('output');
+      outputSection.classList.add('show');
+      outputSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function clearCanvas() {
+      if (confirm('Are you sure you want to clear all fields?')) {
+        const fields = ['purpose', 'values', 'uvp', 'audience', 'strengths', 'personality', 'channels', 'metrics', 'statement'];
+        fields.forEach((field) => (document.getElementById(field).value = ''));
+        document.getElementById('output').classList.remove('show');
+        // Also clear localStorage so mobile users don’t keep stale data
+        fields.forEach((field) => localStorage.removeItem(`brand_${field}`));
+      }
+    }
+
+    // Auto-save to localStorage (runs after DOM is loaded)
+    const fields = ['purpose', 'values', 'uvp', 'audience', 'strengths', 'personality', 'channels', 'metrics', 'statement'];
+    fields.forEach((field) => {
+      const element = document.getElementById(field);
+      const saved = localStorage.getItem(`brand_${field}`);
+      if (saved) element.value = saved;
+      element.addEventListener('input', () => localStorage.setItem(`brand_${field}`, element.value));
+    });
+  </script>
+</body>
+</html>
